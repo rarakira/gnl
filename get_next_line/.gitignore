@@ -6,3 +6,4 @@ a.out
 .vscode/
 .DS_Store
 test.dSYM/
+get_next_line_test/
