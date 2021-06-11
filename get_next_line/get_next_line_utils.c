@@ -11,7 +11,6 @@ size_t	ft_strlen(const char *str)
 	return (count);
 }
 
-
 /* The function copies 'n' bytes from memory area 'src' to memory area 'dst'. */
 void	*ft_memcpy(void *dst, const void *src, size_t n)
 {
@@ -52,68 +51,6 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 	return (srclen);
 }
 
-/* Function writes 'len' bytes of value 'c' to the string 'b'. */
-void	*ft_memset(void *b, int c, size_t len)
-{
-	while (len > 0)
-		((unsigned char *)b)[--len] = (unsigned char)c;
-	return (b);
-}
-
-/* Function to fill memory space with '0's. */
-void	ft_bzero(void *s, size_t n)
-{
-	ft_memset(s, 0, n);
-	return ;
-}
-
-/* Function allocates space for 'count' objects that are 'size' bytes each and
-returns a pointer to the allocated memory.
-The allocated memory is filled with bytes of value zero. */
-void	*ft_calloc(size_t count, size_t size)
-{
-	void	*ptr;
-
-	ptr = malloc(count * size);
-	if (ptr)
-		ft_bzero(ptr, count * size);
-	return (ptr);
-}
-
-/*
-Arguments:
-s is a pointer to the original string.
-start - the character index in the source line from which to start copying.
-len is the maximum length to copy.
-
-Return value:
-Returns a pointer to the copied substring, or NULL if copying is not
-succeeded.
-
-Description:
-The function copies a substring from the original string s starting at index
-start and length at most len. On success, returns a pointer to the copied
-substring.
-*/
-char	*ft_substr(char const *s, unsigned int start, size_t len)
-{
-	size_t	src_len;
-	char	*dest;
-
-	if (!s)
-		return (NULL);
-	src_len = ft_strlen(s);
-	if (start >= src_len + 1 || len == 0)
-		return ((char *)ft_calloc(1, sizeof(char)));
-	if ((src_len - start) < len)
-		len = src_len - start;
-	dest = (char *)malloc(sizeof(char) * (len + 1));
-	if (dest == NULL)
-		return (dest);
-	ft_strlcpy(dest, (s + start), len + 1);
-	return (dest);
-}
-
 /* Function allocates memory for a copy of the string 's1', does the copy,
 and returns a pointer to it. */
 char	*ft_strdup(const char *s1)
@@ -151,36 +88,4 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	ft_memcpy((new_str + s1_len), s2, s2_len);
 	new_str[s1_len + s2_len] = '\0';
 	return (new_str);
-}
-
-/* Function locates the first occurrence of 'c' in string 's'.
-
-It returns a pointer to the byte located, or NULL if 'c' does not exist within
-'n' bytes. */
-void	*ft_memchr(const void *s, int c, size_t n)
-{
-	unsigned char	ch;
-	size_t			i;
-
-	ch = (unsigned char)c;
-	i = 0;
-	while (i < n)
-	{
-		if (((const unsigned char *)s)[i] == ch)
-			return ((void *)(s + i));
-		i++;
-	}
-	return (NULL);
-}
-
-/* Function locates the first '(char)c' in the string pointed to by 's'.
-
-Terminating `\0' is considered to be part of the string; if 'c' is `\0',
-the functions locate the terminating `\0'. */
-char	*ft_strchr(const char *s, int c)
-{
-	size_t	srcsize;
-
-	srcsize = ft_strlen(s);
-	return ((char *)ft_memchr(s, c, srcsize + 1));
 }

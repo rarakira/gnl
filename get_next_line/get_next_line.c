@@ -11,6 +11,22 @@ int	clean_up(char **str1, char **str2)
 	return (-1);
 }
 
+char	*has_new_line(char **str)
+{
+	size_t			i;
+
+	i = 0;
+	if (*str == NULL)
+		return (0);
+	while (*(*str + i) != '\0')
+	{
+		if (*(*str + i) == '\n')
+			return ((char *)(*str + i));
+		i++;
+	}
+	return (NULL);
+}
+
 int	eof_line(char **src, char **buf, char **dest)
 {	
 	free(*buf);
@@ -28,10 +44,10 @@ int	get_line(char **src, char **dest)
 	char	*tmp;
 	char	*sep;
 
-	sep = ft_strchr(*src, '\n');
+	sep = has_new_line(src);
 	*sep = '\0';
 	*dest = ft_strdup(*src);
-	tmp = ft_substr(++sep, 0, BUFFER_SIZE);
+	tmp = ft_strdup(++sep);
 	if (tmp == NULL || *dest == NULL)
 	{
 		free(tmp);
@@ -41,13 +57,6 @@ int	get_line(char **src, char **dest)
 	free(*src);
 	*src = tmp;
 	return (1);
-}
-
-size_t	has_new_line(char *str)
-{
-	if (!str)
-		return (0);
-	return (ft_strchr(str, '\n') != NULL);
 }
 
 int	get_next_line(int fd, char **line)
@@ -61,7 +70,7 @@ int	get_next_line(int fd, char **line)
 	read_res = 1;
 	if (fd < 0 || !line || !buf)
 		return (clean_up(&buf, &rem));
-	while (!has_new_line(rem) && read_res > 0)
+	while ((has_new_line(&rem) == NULL) && read_res > 0)
 	{
 		read_res = read(fd, buf, BUFFER_SIZE);
 		buf[read_res] = '\0';
@@ -75,7 +84,7 @@ int	get_next_line(int fd, char **line)
 	}
 	if (read_res < 0)
 		return (clean_up(&buf, &rem));
-	if (has_new_line(rem))
+	if (has_new_line(&rem) != NULL)
 	{
 		free(buf);
 		buf = NULL;
