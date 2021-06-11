@@ -2,8 +2,11 @@
 *.d
 *.a
 test
-a.out
+*.out
 .vscode/
 .DS_Store
 test.dSYM/
 get_next_line_test/
+gnlTester/
+main.c
+43_with_nl
