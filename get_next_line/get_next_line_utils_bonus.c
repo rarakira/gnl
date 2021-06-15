@@ -3,7 +3,7 @@
 /* Function computes the length of the string 'str' */
 size_t	ft_strlen(const char *str)
 {
-	int	count;
+	size_t	count;
 
 	count = 0;
 	while (str[count] != '\0')

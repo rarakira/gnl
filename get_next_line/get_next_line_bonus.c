@@ -67,27 +67,6 @@ int	get_line(t_list *current, char **dest, t_list **start)
 	return (1);
 }
 
-int	launch_read (char **rem, char **buf, int fd)
-{
-	char			*tmp;
-	ssize_t			read_res;
-
-	read_res = 1;
-	while (!has_new_line(rem) && read_res > 0)
-	{
-		read_res = read(fd, *buf, BUFFER_SIZE);
-		if (read_res < 0)
-			return (-1);
-		*(*buf + read_res) = '\0';
-		tmp = ft_strjoin(*rem, *buf);
-		if (!tmp)
-			return (-1);
-		free(*rem);
-		*rem = tmp;
-	}
-	return (read_res);
-}
-
 t_list	*get_current(t_list	**start, int fd)
 {
 	t_list	*tmp;
@@ -118,14 +97,25 @@ int	get_next_line(int fd, char **line)
 	t_list			*current;
 	ssize_t			read_res;
 	char			*buf;
+	char			*tmp;
 
 	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (fd < 0 || !line || !buf)
 		return (clean_up(&buf, NULL, &start));
 	current = get_current(&start, fd);
-	read_res = launch_read(&current->rem, &buf, fd);
-	if (read_res < 0)
-		return (clean_up(&buf, current, &start));
+	read_res = 1;
+	while (!has_new_line(&current->rem) && read_res > 0)
+	{
+		read_res = read(fd, buf, BUFFER_SIZE);
+		if (read_res < 0)
+			return (clean_up(&buf, current, &start));
+		buf[read_res] = '\0';
+		tmp = ft_strjoin(current->rem, buf);
+		if (!tmp)
+			return (-1);
+		free(current->rem);
+		current->rem = tmp;
+	}
 	free(buf);
 	return (get_line(current, line, &start));
 }
