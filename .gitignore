@@ -2,8 +2,13 @@
 *.d
 *.a
 test
-a.out
+*.out
 .vscode/
 .DS_Store
-test.dSYM/
+*.dSYM/
 gnl_test/
+gnl-war-machine-v2019/
+42cursus_gnl_tests/
+GNL_lover/
+gnl-unit-test/
+42TESTERS-GNL/
